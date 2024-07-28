@@ -1,0 +1,11 @@
+tasks.jar {
+    dependsOn("copyCopyright", "copyDependencyCopyright")
+}
+
+tasks.shadowJar {
+    dependsOn("copyCopyright", "copyDependencyCopyright")
+    archiveClassifier.set("")
+    configurations = [
+            project.configurations.shadow
+    ]
+}

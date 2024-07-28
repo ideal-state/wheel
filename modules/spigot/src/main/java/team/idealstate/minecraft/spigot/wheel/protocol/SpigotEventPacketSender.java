@@ -15,32 +15,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.spigot.wheel;
+package team.idealstate.minecraft.spigot.wheel.protocol;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.messaging.Messenger;
-import team.idealstate.minecraft.spigot.wheel.message.WheelMessageHandler;
+import team.idealstate.minecraft.protocol.wheel.api.EventPacketSender;
+import team.idealstate.minecraft.spigot.wheel.Wheel;
 
-public class Wheel extends JavaPlugin {
-
-    public static final String ID = "wheel";
-    private static Wheel instance;
-
-    public Wheel() {
-        instance = this;
-    }
-
-    public static Wheel getInstance() {
-        return instance;
-    }
-
+public class SpigotEventPacketSender implements EventPacketSender {
     @Override
-    public void onEnable() {
-        Messenger messenger = Bukkit.getMessenger();
-        messenger.registerIncomingPluginChannel(
-                this, ID, new WheelMessageHandler());
-        messenger.registerOutgoingPluginChannel(
-                this, ID);
+    public void sendPacket(byte[] data) {
+        Bukkit.getServer().sendPluginMessage(
+                Wheel.getInstance(),
+                Wheel.ID,
+                data
+        );
     }
 }

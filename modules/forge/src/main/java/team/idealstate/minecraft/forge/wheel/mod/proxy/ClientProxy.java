@@ -21,9 +21,10 @@ package team.idealstate.minecraft.forge.wheel.mod.proxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import team.idealstate.minecraft.forge.wheel.common.Tags;
-import team.idealstate.minecraft.forge.wheel.mod.message.WheelMessageHandler;
+import team.idealstate.minecraft.forge.wheel.mod.message.WheelEventHandler;
 
 /**
  * <p>ClientProxy</p>
@@ -35,15 +36,21 @@ import team.idealstate.minecraft.forge.wheel.mod.message.WheelMessageHandler;
  */
 public class ClientProxy extends CommonProxy {
 
+    private static FMLEventChannel channel;
+
+    public static FMLEventChannel getChannel() {
+        return channel;
+    }
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        NetworkRegistry.INSTANCE.newEventDrivenChannel(Tags.MOD_ID);
+        channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(Tags.MOD_ID);
+        MinecraftForge.EVENT_BUS.register(new WheelEventHandler());
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-        MinecraftForge.EVENT_BUS.register(new WheelMessageHandler());
     }
 }

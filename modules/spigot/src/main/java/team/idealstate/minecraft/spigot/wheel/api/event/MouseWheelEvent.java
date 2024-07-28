@@ -15,32 +15,32 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.spigot.wheel;
+package team.idealstate.minecraft.spigot.wheel.api.event;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.messaging.Messenger;
-import team.idealstate.minecraft.spigot.wheel.message.WheelMessageHandler;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
-public class Wheel extends JavaPlugin {
+public final class MouseWheelEvent extends PlayerEvent {
 
-    public static final String ID = "wheel";
-    private static Wheel instance;
+    private static final HandlerList handlers = new HandlerList();
+    private final int value;
 
-    public Wheel() {
-        instance = this;
+    public MouseWheelEvent(Player who, int value) {
+        super(who);
+        this.value = value;
     }
 
-    public static Wheel getInstance() {
-        return instance;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     @Override
-    public void onEnable() {
-        Messenger messenger = Bukkit.getMessenger();
-        messenger.registerIncomingPluginChannel(
-                this, ID, new WheelMessageHandler());
-        messenger.registerOutgoingPluginChannel(
-                this, ID);
+    public HandlerList getHandlers() {
+        return handlers;
     }
 }

@@ -20,10 +20,11 @@ package team.idealstate.minecraft.forge.wheel.mod.message;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Mouse;
+import team.idealstate.minecraft.protocol.wheel.EventPacketHandler;
+import team.idealstate.minecraft.protocol.wheel.std.WheelEventPacket;
 
 /**
  * <p>WheelMessageHandler</p>
@@ -33,19 +34,15 @@ import org.lwjgl.input.Mouse;
  * @author ketikai
  * @since 1.0.0
  */
-public class WheelMessageHandler {
+public class WheelEventHandler {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onMouseInput(InputEvent.MouseInputEvent event) {
-        if (Mouse.getEventDWheel() != 0) {
-
+        int eventDWheel = Mouse.getEventDWheel();
+        if (eventDWheel != 0) {
+            EventPacketHandler.sendPacket(new WheelEventPacket(eventDWheel));
         }
     }
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onClientPacket(FMLNetworkEvent.ClientCustomPacketEvent event) {
-
-    }
 }

@@ -11,6 +11,6 @@ java {
 
 //idea {
 //    project {
-//        languageLevel.level = javaLanguageVersion.toString()
+//        languageLevel = javaLanguageVersion.toString()
 //    }
 //}

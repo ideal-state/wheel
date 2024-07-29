@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.relocation.SimpleRelocator
-
 plugins {
     id("com.gtnewhorizons.retrofuturagradle") version "1.3.25"
 }
@@ -17,7 +15,8 @@ minecraft {
     groupsToExcludeFromAutoReobfMapping.addAll(
             "com.diffplug",
             "com.diffplug.durian",
-            "net.industrial-craft"
+            "net.industrial-craft",
+            "team.idealstate.minecraft.protocol",
     )
 }
 
@@ -30,7 +29,8 @@ repositories {
 }
 
 dependencies {
-    shadow(project(":modules:wheel-protocol"))
+//    shadow(project(":modules:wheel-protocol"))
+    implementation(project(":modules:wheel-protocol"))
 }
 
 tasks.processResources {
@@ -57,9 +57,13 @@ tasks.processResources {
 
 tasks.shadowJar {
     manifest.attributes.putAll(tasks.jar.get().manifest.attributes)
-    relocate(SimpleRelocator("\\\$\\{mod_id}", rootProject.name, mutableListOf(), mutableListOf(), true))
-    relocate(SimpleRelocator("\\\$\\{mod_name}", rootProject.name, mutableListOf(), mutableListOf(), true))
-    relocate(SimpleRelocator("\\\$\\{mod_version}", version.toString(), mutableListOf(), mutableListOf(), true))
+    configurations = listOf(project.configurations.runtimeClasspath.get())
+    dependencies {
+        include {
+            it.moduleGroup.startsWith("team.idealstate.minecraft.protocol")
+        }
+    }
+    finalizedBy(tasks.reobfJar)
 }
 
 tasks.reobfJar {

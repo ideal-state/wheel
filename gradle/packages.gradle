@@ -1,5 +1,6 @@
 tasks.jar {
-    dependsOn("copyCopyright", "copyDependencyCopyright")
+    dependsOn("copyCopyright", "copyDependencyCopyright", tasks.shadowJar)
+    enabled = false
 }
 
 tasks.shadowJar {
@@ -8,4 +9,25 @@ tasks.shadowJar {
     configurations = [
             project.configurations.shadow
     ]
+
+    doFirst {
+        def tagsMappings = [
+                "id": rootProject.name,
+                "name": rootProject.name,
+                "version": project.version.toString()
+        ]
+        for (final def tagsMapping in tagsMappings) {
+            def pattern = '%tags_'+ tagsMapping.key + '%'
+            def shadedPattern = tagsMapping.value
+            println("Relocating ${pattern} to ${shadedPattern}")
+            relocate(pattern, shadedPattern)
+//            def pattern = "\\\$\\{tags_${tagsMapping.key}}"
+//            def shadedPattern = tagsMapping.value
+//            relocate(pattern, shadedPattern) {
+//                metaClass.setProperty(boolean.class, "rawString", true)
+//                metaClass.setProperty(String.class, "pattern", pattern)
+//                metaClass.setProperty(String.class, "shadedPattern", shadedPattern)
+//            }
+        }
+    }
 }

@@ -40,6 +40,13 @@ public final class WheelEventPacket implements EventPacket {
         return StdEventPacket.MOUSE_WHEEL.getId();
     }
 
+    @Override
+    public String toString() {
+        return "WheelEventPacket{" +
+                "value=" + getValue() +
+                '}';
+    }
+
     static final class Deserializer implements EventPacketDeserializer<WheelEventPacket> {
 
         @Override

@@ -20,11 +20,11 @@ package team.idealstate.minecraft.spigot.wheel;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
+import team.idealstate.minecraft.Tags;
+import team.idealstate.minecraft.spigot.wheel.listener.MouseWheelEventListener;
 import team.idealstate.minecraft.spigot.wheel.message.WheelMessageHandler;
 
 public class Wheel extends JavaPlugin {
-
-    public static final String ID = "wheel";
     private static Wheel instance;
 
     public Wheel() {
@@ -39,8 +39,10 @@ public class Wheel extends JavaPlugin {
     public void onEnable() {
         Messenger messenger = Bukkit.getMessenger();
         messenger.registerIncomingPluginChannel(
-                this, ID, new WheelMessageHandler());
+                this, Tags.ID, new WheelMessageHandler());
         messenger.registerOutgoingPluginChannel(
-                this, ID);
+                this, Tags.ID);
+        Bukkit.getPluginManager().registerEvents(
+                new MouseWheelEventListener(), this);
     }
 }

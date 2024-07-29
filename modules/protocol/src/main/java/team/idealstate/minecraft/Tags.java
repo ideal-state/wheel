@@ -1,6 +1,5 @@
 /*
- *     <one line to give the program's name and a brief idea of what it does.>
- *     Copyright (C) 2024/01/19 ideal-state
+ *     Copyright (C) 2024 ideal-state
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.forge.wheel.common;
+package team.idealstate.minecraft;
 
 /**
  * <p>Tags</p>
@@ -27,7 +26,7 @@ package team.idealstate.minecraft.forge.wheel.common;
  * @since 1.0.0
  */
 public interface Tags {
-    String MOD_ID = "${mod_id}";
-    String MOD_NAME = "${mod_name}";
-    String MOD_VERSION = "${mod_version}";
+    String ID = "%tags_id%";
+    String NAME = "%tags_name%";
+    String VERSION = "%tags_version%";
 }

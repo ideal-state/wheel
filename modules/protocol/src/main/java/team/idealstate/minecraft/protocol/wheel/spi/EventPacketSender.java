@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.protocol.wheel.api;
+package team.idealstate.minecraft.protocol.wheel.spi;
 
 public interface EventPacketSender {
 

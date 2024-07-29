@@ -21,7 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import team.idealstate.minecraft.spigot.wheel.api.event.MouseWheelEvent;
 
-public class MouseWheelEventListener implements Listener {
+public final class MouseWheelEventListener implements Listener {
 
     @EventHandler
     public void onMouseWheel(MouseWheelEvent event) {

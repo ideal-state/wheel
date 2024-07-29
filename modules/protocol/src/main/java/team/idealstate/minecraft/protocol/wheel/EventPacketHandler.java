@@ -17,7 +17,11 @@
 
 package team.idealstate.minecraft.protocol.wheel;
 
-import team.idealstate.minecraft.protocol.wheel.api.*;
+import team.idealstate.minecraft.protocol.wheel.api.EventPacket;
+import team.idealstate.minecraft.protocol.wheel.api.EventPacketDeserializer;
+import team.idealstate.minecraft.protocol.wheel.api.EventPacketListener;
+import team.idealstate.minecraft.protocol.wheel.api.EventPacketSerializer;
+import team.idealstate.minecraft.protocol.wheel.spi.EventPacketSender;
 import team.idealstate.minecraft.protocol.wheel.std.StdEventPacket;
 
 import java.nio.ByteBuffer;
@@ -28,10 +32,12 @@ public abstract class EventPacketHandler {
     private static final EventPacketSender SENDER;
     private static final Map<Short, EventPacketSerializer<?>> SERIALIZER_MAP = new HashMap<>(8, 0.6f);
     private static final Map<Short, EventPacketDeserializer<?>> DESERIALIZER_MAP = new HashMap<>(8, 0.6f);
-    private static final List<TypedEventPacketListener<?>> LISTENERS = new LinkedList<>();
+    private static final Map<Class<?>, List<TypedEventPacketListener<?>>> LISTENER_MAP = new HashMap<>(8, 0.6f);
 
     static {
-        ServiceLoader<EventPacketSender> loader = ServiceLoader.load(EventPacketSender.class);
+        ServiceLoader<EventPacketSender> loader = ServiceLoader.load(
+                EventPacketSender.class, EventPacketHandler.class.getClassLoader()
+        );
         Iterator<EventPacketSender> iterator = loader.iterator();
         if (iterator.hasNext()) {
             SENDER = iterator.next();
@@ -68,15 +74,25 @@ public abstract class EventPacketHandler {
             Class<T> packetType,
             EventPacketListener<T> listener
     ) {
-        LISTENERS.add(new TypedEventPacketListener<>(packetType, listener));
+        LISTENER_MAP.computeIfAbsent(
+                packetType, k -> new LinkedList<>()
+        ).add(new TypedEventPacketListener<>(packetType, listener));
     }
 
     public static boolean unregisterListener(EventPacketListener<?> listener) {
-        return LISTENERS.removeIf(typedListener -> typedListener.listener.equals(listener));
+        return LISTENER_MAP.values().removeIf(
+                listeners -> listeners.removeIf(
+                        typedListener -> typedListener.listener.equals(listener)
+                )
+        );
     }
 
-    public static boolean unregisterListener(Class<? extends EventPacket> listener) {
-        return LISTENERS.removeIf(typedListener -> typedListener.packetType.equals(listener));
+    public static boolean unregisterListener(Class<? extends EventPacket> packetType) {
+        return LISTENER_MAP.values().removeIf(
+                listeners -> listeners.removeIf(
+                        typedListener -> typedListener.packetType.equals(packetType)
+                )
+        );
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -90,7 +106,8 @@ public abstract class EventPacketHandler {
         buffer.putShort(packet.getEventId());
         buffer.put(serialized);
         buffer.flip();
-        SENDER.sendPacket(buffer.array());
+        byte[] data = buffer.array();
+        SENDER.sendPacket(data);
     }
 
     public static void receivePacket(byte[] data) {
@@ -99,11 +116,11 @@ public abstract class EventPacketHandler {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static void receivePacket(byte[] data, Map<String, Object> context) {
-        if (LISTENERS.isEmpty()) {
+        if (LISTENER_MAP.isEmpty()) {
             return;
         }
         ByteBuffer wrapped = ByteBuffer.wrap(data);
-        wrapped.flip();
+//        wrapped.flip();
         short eventId = wrapped.getShort();
         EventPacketDeserializer<?> deserializer = DESERIALIZER_MAP.get(eventId);
         if (deserializer == null) {
@@ -113,7 +130,11 @@ public abstract class EventPacketHandler {
         wrapped.get(dst);
         EventPacket packet = deserializer.deserialize(dst);
         Class<? extends EventPacket> packetType = packet.getClass();
-        for (TypedEventPacketListener listener : LISTENERS) {
+        List<TypedEventPacketListener<?>> listeners = LISTENER_MAP.get(packetType);
+        if (listeners == null || listeners.isEmpty()) {
+            return;
+        }
+        for (TypedEventPacketListener listener : listeners) {
             if (packetType.equals(listener.getPacketType())) {
                 listener.onPacketReceived(packet, context);
             }

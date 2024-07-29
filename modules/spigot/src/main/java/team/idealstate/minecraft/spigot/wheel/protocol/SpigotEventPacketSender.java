@@ -18,7 +18,8 @@
 package team.idealstate.minecraft.spigot.wheel.protocol;
 
 import org.bukkit.Bukkit;
-import team.idealstate.minecraft.protocol.wheel.api.EventPacketSender;
+import team.idealstate.minecraft.Tags;
+import team.idealstate.minecraft.protocol.wheel.spi.EventPacketSender;
 import team.idealstate.minecraft.spigot.wheel.Wheel;
 
 public class SpigotEventPacketSender implements EventPacketSender {
@@ -26,7 +27,7 @@ public class SpigotEventPacketSender implements EventPacketSender {
     public void sendPacket(byte[] data) {
         Bukkit.getServer().sendPluginMessage(
                 Wheel.getInstance(),
-                Wheel.ID,
+                Tags.ID,
                 data
         );
     }

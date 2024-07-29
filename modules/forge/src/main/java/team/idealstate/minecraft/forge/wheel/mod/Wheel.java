@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
-import team.idealstate.minecraft.forge.wheel.common.Tags;
+import team.idealstate.minecraft.Tags;
 import team.idealstate.minecraft.forge.wheel.mod.proxy.CommonProxy;
 
 /**
@@ -36,7 +36,7 @@ import team.idealstate.minecraft.forge.wheel.mod.proxy.CommonProxy;
  * @author ketikai
  * @since 1.0.0
  */
-@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.MOD_VERSION)
+@Mod(modid = Tags.ID, name = Tags.NAME, version = Tags.VERSION)
 public class Wheel {
 
     @SidedProxy(

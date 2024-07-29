@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import team.idealstate.minecraft.forge.wheel.common.Tags;
+import team.idealstate.minecraft.Tags;
 import team.idealstate.minecraft.forge.wheel.mod.message.WheelEventHandler;
 
 /**
@@ -45,7 +45,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(Tags.MOD_ID);
+        channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(Tags.ID);
         MinecraftForge.EVENT_BUS.register(new WheelEventHandler());
     }
 

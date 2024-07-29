@@ -21,9 +21,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-import team.idealstate.minecraft.forge.wheel.common.Tags;
+import team.idealstate.minecraft.Tags;
 import team.idealstate.minecraft.forge.wheel.mod.proxy.ClientProxy;
-import team.idealstate.minecraft.protocol.wheel.api.EventPacketSender;
+import team.idealstate.minecraft.protocol.wheel.spi.EventPacketSender;
 
 public class ForgeEventPacketSender implements EventPacketSender {
 
@@ -31,7 +31,7 @@ public class ForgeEventPacketSender implements EventPacketSender {
     public void sendPacket(byte[] data) {
         ByteBuf byteBuf = Unpooled.wrappedBuffer(data);
         PacketBuffer payload = new PacketBuffer(byteBuf);
-        FMLProxyPacket packet = new FMLProxyPacket(payload, Tags.MOD_ID);
+        FMLProxyPacket packet = new FMLProxyPacket(payload, Tags.ID);
         ClientProxy.getChannel().sendToServer(packet);
     }
 }

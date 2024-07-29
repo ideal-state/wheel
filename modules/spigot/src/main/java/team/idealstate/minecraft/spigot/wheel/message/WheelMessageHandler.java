@@ -20,6 +20,7 @@ package team.idealstate.minecraft.spigot.wheel.message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import team.idealstate.minecraft.Tags;
 import team.idealstate.minecraft.protocol.wheel.EventPacketHandler;
 import team.idealstate.minecraft.protocol.wheel.std.StdEventPacket;
 import team.idealstate.minecraft.protocol.wheel.std.WheelEventPacket;
@@ -46,7 +47,7 @@ public final class WheelMessageHandler implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if ("wheel".equals(channel)) {
+        if (Tags.ID.equals(channel)) {
             HashMap<String, Object> context = new HashMap<>();
             context.put("player", player);
             EventPacketHandler.receivePacket(message, context);

@@ -15,18 +15,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.protocol.wheel.payload;
+package team.idealstate.minecraft.protocol.wheel.payload
 
-import lombok.*;
+data class Hello(val message: String) {
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@EqualsAndHashCode
-@ToString
-public class Hello {
-
-    public static final short ID = 1;
-
-    private String message;
+    companion object {
+        const val ID: Short = 1
+    }
 }

@@ -15,38 +15,34 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.spigot.wheel;
+package team.idealstate.minecraft.forge.wheel.proxy;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
+import team.idealstate.minecraft.forge.wheel.listener.HelloListener;
+import team.idealstate.minecraft.forge.wheel.packet.ForgePacketChannel;
 import team.idealstate.minecraft.protocol.wheel.impl.std.codec.StdJacksonPacketCodec;
 import team.idealstate.minecraft.protocol.wheel.payload.Hello;
 import team.idealstate.minecraft.protocol.wheel.util.Entry;
-import team.idealstate.minecraft.spigot.wheel.command.SayHello;
-import team.idealstate.minecraft.spigot.wheel.listener.HelloListener;
-import team.idealstate.minecraft.spigot.wheel.packet.SpigotPacketChannel;
 import team.idealstate.minecraft.tags.wheel.Tags;
 
 import java.util.Objects;
 
-public class Wheel extends JavaPlugin {
+public class ClientProxy extends CommonProxy {
 
-    private static volatile SpigotPacketChannel channel;
+    private static volatile ForgePacketChannel channel;
 
     @NotNull
-    public static SpigotPacketChannel channel() {
+    public static ForgePacketChannel channel() {
         return Objects.requireNonNull(channel);
     }
 
     @Override
-    public void onEnable() {
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(HelloListener.INSTANCE, this);
-        channel = new SpigotPacketChannel(this, Tags.ID,
-                Entry.of(Hello.ID, new StdJacksonPacketCodec<>(Hello.class))
-                );
-        getCommand("hi").setExecutor(SayHello.INSTANCE);
+    public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
+        MinecraftForge.EVENT_BUS.register(HelloListener.INSTANCE);
+        channel = new ForgePacketChannel(Tags.ID,
+                Entry.of(Hello.ID, new StdJacksonPacketCodec<>(Hello.class)));
     }
 }

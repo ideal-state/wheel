@@ -1,3 +1,11 @@
+configurations {
+    shadow {
+        attributes {
+            attribute(Attribute.of("rfgDeobfuscatorTransformed", Boolean.class), Boolean.TRUE)
+        }
+    }
+}
+
 dependencies {
     compileOnly "org.jetbrains:annotations:24.0.1"
 

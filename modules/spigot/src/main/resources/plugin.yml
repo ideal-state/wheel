@@ -1,5 +1,8 @@
 name: ${name}
 version: ${version}
 main: team.idealstate.minecraft.spigot.wheel.Wheel
-author: ketikai
+authors:
+  - ketikai
 load: STARTUP
+commands:
+  hi: {}

@@ -2,11 +2,12 @@ plugins {
     id("com.gtnewhorizons.retrofuturagradle") version "1.3.25"
 }
 
-group = "team.idealstate.minecraft.forge"
-version = "1.0.0"
+val minecraftVersion = "1.12.2"
+
+group = "${rootProject.group}.forge"
 
 minecraft {
-    mcVersion.set("1.12.2")
+    mcVersion.set(minecraftVersion)
 
     // Enable assertions in the mod's package when running the client or server
     extraRunJvmArguments.add("-ea:${project.group}")
@@ -16,7 +17,6 @@ minecraft {
             "com.diffplug",
             "com.diffplug.durian",
             "net.industrial-craft",
-            "team.idealstate.minecraft.protocol",
     )
 }
 
@@ -29,8 +29,10 @@ repositories {
 }
 
 dependencies {
-//    shadow(project(":modules:wheel-protocol"))
-    implementation(project(":modules:wheel-protocol"))
+    shadow(project(":modules:${rootProject.name}-tags"))
+    shadow(project(":modules:${rootProject.name}-protocol")) {
+        isTransitive = false
+    }
 }
 
 tasks.processResources {
@@ -39,8 +41,7 @@ tasks.processResources {
             "mod_id" to rootProject.name,
             "mod_name" to rootProject.name,
             "mod_version" to version,
-            "mod_authors" to "ketikai".replace(" ", "").replace(",", "\",\""),
-            "minecraft_version" to "1.12.2",
+            "minecraft_version" to minecraftVersion,
     )
     filesMatching(listOf("assets/**/*.lang", "**/mcmod.info", "**/pack.mcmeta")) {
         expand(props)
@@ -56,13 +57,6 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
-    manifest.attributes.putAll(tasks.jar.get().manifest.attributes)
-    configurations = listOf(project.configurations.runtimeClasspath.get())
-    dependencies {
-        include {
-            it.moduleGroup.startsWith("team.idealstate.minecraft.protocol")
-        }
-    }
     finalizedBy(tasks.reobfJar)
 }
 

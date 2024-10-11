@@ -4,8 +4,7 @@ import java.nio.charset.Charset
 
 val minecraftVersion = "1.12.2"
 
-group = "team.idealstate.minecraft.spigot"
-version = "1.0.0"
+group = "${rootProject.group}.spigot"
 
 repositories {
     maven {
@@ -22,7 +21,10 @@ dependencies {
     compileOnly("org.apache.logging.log4j:log4j-api:2.22.1")
     compileOnly("org.spigotmc:spigot-api:${minecraftVersion}-R0.1-SNAPSHOT")
 
-    shadow(project(":modules:wheel-protocol"))
+    shadow(project(":modules:${rootProject.name}-tags"))
+    shadow(project(":modules:${rootProject.name}-protocol")) {
+        isTransitive = false
+    }
 }
 
 tasks.processResources {

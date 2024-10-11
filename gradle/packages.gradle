@@ -14,20 +14,21 @@ tasks.shadowJar {
         def tagsMappings = [
                 "id": rootProject.name,
                 "name": rootProject.name,
-                "version": project.version.toString()
+                "version": rootProject.version.toString()
         ]
         for (final def tagsMapping in tagsMappings) {
             def pattern = '%tags_'+ tagsMapping.key + '%'
             def shadedPattern = tagsMapping.value
             println("Relocating ${pattern} to ${shadedPattern}")
             relocate(pattern, shadedPattern)
-//            def pattern = "\\\$\\{tags_${tagsMapping.key}}"
-//            def shadedPattern = tagsMapping.value
-//            relocate(pattern, shadedPattern) {
-//                metaClass.setProperty(boolean.class, "rawString", true)
-//                metaClass.setProperty(String.class, "pattern", pattern)
-//                metaClass.setProperty(String.class, "shadedPattern", shadedPattern)
-//            }
+        }
+
+        def prefix = "${project.group}.${rootProject.name}"
+        def patterns = [
+                "com.fasterxml.jackson."
+        ]
+        for (final def pattern in patterns) {
+            relocate(pattern, "${prefix}.${pattern}")
         }
     }
 }

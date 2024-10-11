@@ -33,6 +33,7 @@ dependencies {
     shadow(project(":modules:${rootProject.name}-protocol")) {
         isTransitive = false
     }
+    shadow(kotlin("stdlib"))
 }
 
 tasks.processResources {

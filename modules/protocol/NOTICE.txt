@@ -22,3 +22,8 @@
     (https://github.com/FasterXML/jackson-databind)
 
 ------------------------------------------------------------------------------
+
+    jackson-module-kotlin
+    (https://github.com/FasterXML/jackson-module-kotlin)
+
+------------------------------------------------------------------------------

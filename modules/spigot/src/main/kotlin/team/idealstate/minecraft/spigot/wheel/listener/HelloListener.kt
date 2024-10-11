@@ -15,26 +15,20 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package team.idealstate.minecraft.spigot.wheel.listener;
+package team.idealstate.minecraft.spigot.wheel.listener
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import team.idealstate.minecraft.protocol.wheel.payload.Hello;
-import team.idealstate.minecraft.spigot.wheel.packet.event.SpigotPacketReceivedEvent;
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import team.idealstate.minecraft.protocol.wheel.payload.Hello
+import team.idealstate.minecraft.spigot.wheel.packet.event.SpigotPacketReceivedEvent
 
-public enum HelloListener implements Listener {
-
-    INSTANCE;
+object HelloListener : Listener {
 
     @EventHandler
-    public void onHello(SpigotPacketReceivedEvent event) {
-        if (event.getPayload() instanceof Hello) {
-            CommandSender sender = event.getPlayer();
-            if (sender == null) {
-                return;
-            }
-            sender.sendMessage(((Hello) event.getPayload()).getMessage());
+    fun onHello(event: SpigotPacketReceivedEvent) {
+        if (event.payload is Hello) {
+            val sender = event.player ?: return
+            sender.sendMessage((event.payload as Hello).message)
         }
     }
 }

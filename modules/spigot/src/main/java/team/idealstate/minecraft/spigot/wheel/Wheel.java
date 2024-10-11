@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import team.idealstate.minecraft.protocol.wheel.impl.std.codec.StdJacksonPacketCodec;
 import team.idealstate.minecraft.protocol.wheel.payload.Hello;
 import team.idealstate.minecraft.protocol.wheel.util.Entry;
-import team.idealstate.minecraft.spigot.wheel.command.SayHello;
+import team.idealstate.minecraft.spigot.wheel.command.Hi;
 import team.idealstate.minecraft.spigot.wheel.listener.HelloListener;
 import team.idealstate.minecraft.spigot.wheel.packet.SpigotPacketChannel;
 import team.idealstate.minecraft.tags.wheel.Tags;
@@ -47,6 +47,6 @@ public class Wheel extends JavaPlugin {
         channel = new SpigotPacketChannel(this, Tags.ID,
                 Entry.of(Hello.ID, new StdJacksonPacketCodec<>(Hello.class))
                 );
-        getCommand("hi").setExecutor(SayHello.INSTANCE);
+        getCommand(Hi.NAME).setExecutor(Hi.INSTANCE);
     }
 }

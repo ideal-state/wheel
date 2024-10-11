@@ -19,6 +19,7 @@ package team.idealstate.minecraft.protocol.wheel.impl.std.codec;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.idealstate.minecraft.protocol.wheel.api.PacketCodec;
@@ -34,7 +35,7 @@ public class StdJacksonPacketCodec<T> implements PacketCodec {
 
     public StdJacksonPacketCodec(@NotNull Class<T> packetType) {
         this.packetType = Objects.requireNonNull(packetType);
-        this.mapper = new ObjectMapper();
+        this.mapper = new ObjectMapper().registerModule(new KotlinModule.Builder().build());
     }
 
     @Override

@@ -1,6 +1,7 @@
 plugins {
     id("idea")
     id("com.gradleup.shadow") version "8.3.3" apply false
+    kotlin("jvm") version "1.9.22" apply false
 }
 
 group = "team.idealstate.minecraft"
@@ -19,6 +20,7 @@ subprojects {
         plugin("java")
         plugin("java-library")
         plugin("com.gradleup.shadow")
+        plugin("org.jetbrains.kotlin.jvm")
 
         from(rootProject.file("/gradle/languages.gradle"))
         from(rootProject.file("/gradle/repositories.gradle"))
